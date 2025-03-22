@@ -20,7 +20,8 @@ if (!$data || !isset($data['speed']) || !isset($data['pressure']) || !isset($dat
 
 try {
     // الاتصال بـ MongoDB على Railway
-    $mongo = new Client("mongodb://admin:password@mongodb:27017/carsynce"); 
+    $mongo = new Client("mongodb://admin:password@projectcarsync-production.up.railway.app:27017/carsynce");
+
     $collection = $mongo->carsynce->sensors;
 
     // إدخال البيانات إلى قاعدة البيانات
