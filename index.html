@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Sensor Data</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h2>Live Sensor Data</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Speed</th>
+                <th>Pressure</th>
+                <th>Temperature</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody id="sensorData">
+            <!-- البيانات ستظهر هنا -->
+        </tbody>
+    </table>
+
+    <script>
+        function fetchSensorData() {
+            $.getJSON("get_sensor_data.php", function(data) {
+                var tableContent = "";
+                data.forEach(function(sensor) {
+                    tableContent += "<tr>" +
+                        "<td>" + sensor.speed + "</td>" +
+                        "<td>" + sensor.pressure + "</td>" +
+                        "<td>" + sensor.temperature + "</td>" +
+                        "<td>" + sensor.timestamp + "</td>" +
+                        "</tr>";
+                });
+                $("#sensorData").html(tableContent);
+            });
+        }
+
+        // تحديث البيانات كل ثانية
+        setInterval(fetchSensorData, 1000);
+
+        // تحميل البيانات عند فتح الصفحة
+        fetchSensorData();
+    </script>
+</body>
+</html>
