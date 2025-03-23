@@ -1,0 +1,2 @@
+Received Data: {"speed":80,"pressure":100,"temperature":25}
+Connected to MongoDB successfully
