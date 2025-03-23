@@ -3,7 +3,7 @@
         'name' => 'dell/project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '4cc28cb866c7906b4a52c204094e097967cce7c7',
+        'reference' => 'da6d1a33d6b7f659d1f14822eaede5da48c2af5c',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'dell/project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '4cc28cb866c7906b4a52c204094e097967cce7c7',
+            'reference' => 'da6d1a33d6b7f659d1f14822eaede5da48c2af5c',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
