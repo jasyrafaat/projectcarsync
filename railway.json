@@ -1,10 +1,11 @@
 {
     "services": {
+      "web": {
+        "source": "service",
+        "startCommand": "php -S 0.0.0.0:8080 -t ."
+      },
       "mongodb": {
-        "source": "dockerfile",
-        "envVars": {
-          "MONGO_URI": "mongodb+srv://jasyrafaat:jasy2002@cluster0.ng0is.mongodb.net/?retryWrites=true&w=majority"
-        }
+        "source": "service"
       }
     }
   }
