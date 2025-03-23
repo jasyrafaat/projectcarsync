@@ -1,12 +1,16 @@
 <?php
 require 'vendor/autoload.php'; // تحميل مكتبة MongoDB
 
-$client = new MongoDB\Client("mongodb://localhost:27017");
+use MongoDB\Client;
 
 try {
-    $dbs = $client->listDatabases();
-    echo "✅ اتصال ناجح بـ MongoDB!";
+    $mongoClient = new Client("mongodb+srv://jasyrafaat:jasy2002@cluster0.ng0is.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
+
+    $database = $mongoClient->selectDatabase('carsynce');
+    $collection = $database->selectCollection('sensors');
+
+    echo "✅ Successfully connected to MongoDB Atlas!";
 } catch (Exception $e) {
-    echo "❌ فشل الاتصال: " . $e->getMessage();
+    echo "❌ Connection failed: " . $e->getMessage();
 }
 ?>

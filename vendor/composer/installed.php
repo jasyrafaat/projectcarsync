@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'dell/project',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '02114dc8480658fe3e64b147e946ee1ec62d3d91',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'dell/project' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '02114dc8480658fe3e64b147e946ee1ec62d3d91',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

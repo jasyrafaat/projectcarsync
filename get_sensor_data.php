@@ -1,24 +1,29 @@
 <?php
 require 'vendor/autoload.php';
-
 use MongoDB\Client;
 
-$mongoClient = new Client("mongodb://localhost:27017");
-$collection = $mongoClient->carsynce->sensors;
+header('Content-Type: application/json'); // تحديد نوع المحتوى كـ JSON
 
-$data = $collection->find([], ['sort' => ['timestamp' => -1], 'limit' => 10]);
+try {
+    // الاتصال بـ MongoDB
+    $mongo = new Client("mongodb+srv://jasyrafaat:jasy2002@cluster0.ng0is.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
+    $collection = $mongo->carsynce->sensors;
 
-$response = [];
-foreach ($data as $row) {
-    $response[] = [
-        "_id" => (string) $row->_id,
-        "speed" => $row->speed,
-        "pressure" => $row->pressure,
-        "temperature" => $row->temperature,
-        "timestamp" => date('Y-m-d H:i:s', $row->timestamp->toDateTime()->getTimestamp())
-    ];
+    // جلب البيانات وتحويل الـ timestamp إلى تاريخ قابل للقراءة
+    $documents = $collection->find([], ['sort' => ['timestamp' => -1]]); // ترتيب البيانات من الأحدث إلى الأقدم
+
+    $data = [];
+    foreach ($documents as $doc) {
+        $data[] = [
+            'speed' => $doc['speed'],
+            'pressure' => $doc['pressure'],
+            'temperature' => $doc['temperature'],
+            'timestamp' => date('Y-m-d H:i:s', $doc['timestamp']->toDateTime()->getTimestamp()) // تحويل الـ timestamp
+        ];
+    }
+
+    echo json_encode($data);
+} catch (Exception $e) {
+    echo json_encode(["status" => "error", "message" => $e->getMessage()]);
 }
-
-header('Content-Type: application/json');
-echo json_encode($response);
 ?>
