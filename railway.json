@@ -1,0 +1,11 @@
+{
+    "services": {
+      "mongodb": {
+        "source": "dockerfile",
+        "envVars": {
+          "MONGO_URI": "mongodb+srv://jasyrafaat:jasy2002@cluster0.ng0is.mongodb.net/?retryWrites=true&w=majority"
+        }
+      }
+    }
+  }
+  
