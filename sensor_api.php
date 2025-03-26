@@ -1,12 +1,12 @@
 <?php
 require 'vendor/autoload.php'; // تحميل مكتبة MongoDB
-
 use MongoDB\Client;
 
 // إعداد CORS للسماح بالاتصال من أي مصدر
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
+header('Content-Type: application/json'); // تحديد نوع المحتوى كـ JSON
 
 // السماح فقط بطلبات POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -27,20 +27,23 @@ if (!isset($data['speed'], $data['pressure'], $data['temperature'])) {
 }
 
 try {
-    // الاتصال بـ MongoDB باستخدام URI مباشر
-    $mongoUri = "mongodb+srv://jasyrafaat:jasy2002@cluster0.ng0is.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-    $mongoClient = new Client($mongoUri);
+    // جلب `MONGO_URI` من متغيرات البيئة
+    $mongoUri = getenv('MONGO_URI');
+    if (!$mongoUri) {
+        throw new Exception("MONGO_URI environment variable is not set.");
+    }
 
-    // تحديد قاعدة البيانات والمجموعة
-    $database = $mongoClient->selectDatabase('carsynce'); 
-    $collection = $database->selectCollection('sensors'); 
+    // الاتصال بـ MongoDB
+    $mongoClient = new Client($mongoUri);
+    $database = $mongoClient->selectDatabase('carsynce');
+    $collection = $database->selectCollection('sensors');
 
     // إدخال البيانات إلى قاعدة البيانات
     $insertResult = $collection->insertOne([
         'speed' => (int) $data['speed'],
         'pressure' => (int) $data['pressure'],
         'temperature' => (int) $data['temperature'],
-        'timestamp' => new MongoDB\BSON\UTCDateTime()
+        'timestamp' => new MongoDB\BSON\UTCDateTime() // حفظ التوقيت
     ]);
 
     echo json_encode([
@@ -49,11 +52,9 @@ try {
         "inserted_id" => (string) $insertResult->getInsertedId()
     ]);
 } catch (Exception $e) {
-    // تسجيل الخطأ في ملف log
-    error_log("MongoDB Error: " . $e->getMessage());
+    error_log("MongoDB Error: " . $e->getMessage()); // تسجيل الخطأ
 
     http_response_code(500);
     echo json_encode(["status" => "error", "message" => "Server error: " . $e->getMessage()]);
 }
-
 ?>
