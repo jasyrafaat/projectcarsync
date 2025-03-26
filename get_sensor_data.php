@@ -2,28 +2,43 @@
 require 'vendor/autoload.php';
 use MongoDB\Client;
 
-header('Content-Type: application/json'); // تحديد نوع المحتوى كـ JSON
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json"); // تحديد نوع المحتوى كـ JSON
 
 try {
+    // جلب `MONGO_URI` من متغيرات البيئة
+    $mongoUri = getenv('MONGO_URI');
+    if (!$mongoUri) {
+        throw new Exception("MONGO_URI environment variable is not set.");
+    }
+
     // الاتصال بـ MongoDB
-    $mongo = new Client("mongodb+srv://jasyrafaat:jasy2002@cluster0.ng0is.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
+    $mongo = new Client($mongoUri);
     $collection = $mongo->carsynce->sensors;
 
-    // جلب البيانات وتحويل الـ timestamp إلى تاريخ قابل للقراءة
-    $documents = $collection->find([], ['sort' => ['timestamp' => -1]]); // ترتيب البيانات من الأحدث إلى الأقدم
+    // جلب البيانات وترتيبها من الأحدث إلى الأقدم
+    $documents = $collection->find([], ['sort' => ['timestamp' => -1]]);
 
     $data = [];
     foreach ($documents as $doc) {
         $data[] = [
-            'speed' => $doc['speed'],
-            'pressure' => $doc['pressure'],
-            'temperature' => $doc['temperature'],
-            'timestamp' => date('Y-m-d H:i:s', $doc['timestamp']->toDateTime()->getTimestamp()) // تحويل الـ timestamp
+            'speed' => $doc['speed'] ?? null,
+            'pressure' => $doc['pressure'] ?? null,
+            'temperature' => $doc['temperature'] ?? null,
+            'timestamp' => isset($doc['timestamp']) 
+                ? date('Y-m-d H:i:s', $doc['timestamp']->toDateTime()->getTimestamp()) 
+                : null
         ];
     }
 
-    echo json_encode($data);
+    echo json_encode([
+        "status" => "success",
+        "data" => $data
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 } catch (Exception $e) {
-    echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+    echo json_encode([
+        "status" => "error",
+        "message" => $e->getMessage()
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 }
 ?>
